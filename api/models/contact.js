@@ -1,31 +1,23 @@
 const mongoose = require('mongoose');
-const course = require('./subcription');
-const users = require('./users');
 const salesofferScheme = mongoose.Schema(
     {
         _id: mongoose.Schema.Types.ObjectId,
-        courseId: {
-            type: String,
-            required: true,
-            ref: course
-        },
-        userId: {
-            type: String,
-            required: true,
-            ref: users
-        },
-        timeStamp: {
+        customerName: {
             type: String,
             required: true,
         },
-        amount: {
+        mobile: {
             type: String,
             required: true,
         },
-        transactionId: {
+        email: {
             type: String,
             required: true,
-        }
+        },
+        message: {
+            type: String,
+            required: true,
+        },
     }
 );
-module.exports = mongoose.model('Subscribed', salesofferScheme); 
+module.exports = mongoose.model('Contact', salesofferScheme); 

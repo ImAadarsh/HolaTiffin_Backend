@@ -12,6 +12,9 @@ const checkAuth = require('../middleware/check-auth');
 const cloudinary = require('../utils/cloudinary');
 const upload = require('../utils/multer');
 const fs = require('fs');
+const casestudy = require('../models/casestudy');
+const { find } = require('../models/users');
+const { array } = require('../utils/multer');
 function makeid(length){
   var result           = '';
   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -210,7 +213,38 @@ users.update({email:req.body.email},{
       res.status(500).json(error);
   });
 }});
+});
 
+router.post('/send', (req,res,next)=>{
+  casestudy.find({ _id: req.body.caseid })
+    .exec()
+    .then(data => {
+      if (data.length < 1) {
+        return res.status(409).json({
+          message: "Invaid CaseStudy ID"
+        });
+      }else{
+        console.log(data[0].name);
+    let mailOptions = {
+      from: process.env.MAIL_USERNAME,
+      to: req.body.email,
+      subject: data[0].name,
+      html: 'CASE STUDY ::: '+data[0].text+' . <br> Please CLick of the Below link to Download PDF. <br> <a href="'+data[0].link+'" > <h1>CLICK HERE</h1></a> .'
+    };
+    nodemail.sendMail(mailOptions, function(err, data) {
+      if (err) {
+        console.log("Error " + err);
+      } else {
+        console.log("Email sent successfully");
+        res.status(200).json({
+          status: true,
+          message: 'Email sent successfully.',
+              });
+      }
+    });
+
+      
+}});
 });
 
 router.post("/setpassword", (req, res, next) => {

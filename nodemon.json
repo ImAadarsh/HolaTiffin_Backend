@@ -1,12 +1,12 @@
 {
     "env": {
-        "MONGO_ATLAS_PW": "scaler",
-        "JWT_KEY": "xirtS",
-        "CLOUD_NAME": "strix-digital",
-        "CLOUD_KEY": "576127676785571",
-        "CLOUD_SECRET": "aLySilv69kgAZPTDzboyAraiKGQ",
+        "MONGO_ATLAS_PW": "pinnacle",
+        "JWT_KEY": "JNEJD468fn3eficu3HJHS",
+        "CLOUD_NAME": "duszgzcgf",
+        "CLOUD_KEY": "222523912277184",
+        "CLOUD_SECRET": "STR6dXa6I2kidyv61FEofXDxoS8",
         "MAIL_HOST": "smtp.hostinger.com",
-        "MAIL_USERNAME": "contact@strixdigital.in",
-        "MAIL_PASS": "Quinkpost@2020"
+        "MAIL_USERNAME": "finance@endeavourdigital.in",
+        "MAIL_PASS": "Endeavour@2023"
     }
 }

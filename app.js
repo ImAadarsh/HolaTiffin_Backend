@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
-mongoose.connect('mongodb+srv://scaler:'+process.env.MONGO_ATLAS_PW+'@scaler.zwveofg.mongodb.net/?retryWrites=true&w=majority',{
+mongoose.connect('mongodb+srv://pinnacle:'+process.env.MONGO_ATLAS_PW+'@pinnacle.wmuz450.mongodb.net/?retryWrites=true&w=majority',{
     useNewUrlParser: true, 
 useUnifiedTopology: true
 });
@@ -14,14 +14,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // API Routes ........................................................
-const salesofferRoute = require('./api/routes/subscription');
+const casestudyRoute = require('./api/routes/casestudy');
 const usersRoute = require('./api/routes/users');
-const subscribeRoute = require('./api/routes/subscribed');
+const contactRoute = require('./api/routes/contact');
+const feedbackRoute = require('./api/routes/feedback');
 
 // End API Routes ....................................................
-app.use('/course', salesofferRoute);
+app.use('/casestudy', casestudyRoute);
 app.use('/user', usersRoute);
-app.use('/subscribe', subscribeRoute);
+app.use('/contact', contactRoute);
+app.use('/feedback', feedbackRoute);
 
 // No Route Error Handler
 app.use((req,res,next) => {

@@ -9,8 +9,7 @@ const fs = require('fs');
 const checkAuth = require('../middleware/check-auth');
 const cloudinary = require('../utils/cloudinary');  
 const upload = require('../utils/multer');
-const SalesOffer = require('../models/subcription');
-const subcription = require('../models/subcription');
+const casestudy = require('../models/casestudy');
 
 // Require System
 function base64Encode(file) {
@@ -18,8 +17,8 @@ function base64Encode(file) {
     return body.toString("base64");
   }
 
-router.get('/',checkAuth,(req,res,next)=>{
-    SalesOffer.find()
+router.get('/',(req,res,next)=>{
+    casestudy.find()
     .select()
     .exec()
     .then(data => {
@@ -32,7 +31,7 @@ router.get('/',checkAuth,(req,res,next)=>{
             };
             res.status(200).json(respose);
         }else{
-            res.status(404).json({message: 'Subcription not found'});
+            res.status(404).json({message: 'casestudy not found'});
         }
     })
     .catch(err => {
@@ -41,48 +40,68 @@ router.get('/',checkAuth,(req,res,next)=>{
     // res.status(200).json({message: 'Product not found'});
 });
 
-router.post('/',checkAuth,upload.single('Image'), async (req,res,next)=>{
+router.post('/',checkAuth,  upload.fields([
+    {
+      name: "icon",
+      maxCount: 1,
+    },
+    {
+      name: "link",
+      maxCount: 1,
+    }
+  ]), async (req,res,next)=>{
     try {
-        var base64String = base64Encode(req.file.path);
+        path0 = req.files.icon[0];
+        var base64String = base64Encode(path0.path);
         const uploadString = "data:image/jpeg;base64," + base64String;
         const uploadResponse = await cloudinary.uploader.upload(uploadString, {
           overwrite: true,
           invalidate: true,
           crop: "fill",
         });
-     var url =  uploadResponse.secure_url;
+        var url0 = uploadResponse.secure_url;
       } catch (e) {
         console.log(e);
       }
-    const row = new SalesOffer(
+      try {
+        path1 = req.files.link[0];
+        var base64String = base64Encode(path1.path);
+        const uploadString = "data:image/jpeg;base64," + base64String;
+        const uploadResponse = await cloudinary.uploader.upload(uploadString, {
+          overwrite: true,
+          invalidate: true,
+          crop: "fill",
+        });
+        var url1 = uploadResponse.secure_url;
+      } catch (e) {
+        console.log(e);
+      }
+    const row = new casestudy(
         {
             _id: new mongoose.Types.ObjectId(),
-            courseName: req.body.courseName,
-            courseTitle: req.body.courseTitle,
-            courseDescription: req.body.courseDescription,
-            courseAmount: req.body.courseAmount,
-            courseImageImage: url,
-            timeStamp: new Date(),
+            link: url1,
+            icon: url0,
+            name: req.body.name,
+            text: req.body.text,
         }
     );
     row.save().then(result=>{
         console.log(result);
         res.status(200).json({
             status: true,
-            message: 'Course is created successfully.',
+            message: 'sucessfully uploaded.',
             createdOffer: result,
                 });
     }).catch(error=>{
         console.log(error);
         res.status(500).json(error);
     });
-
 });
 
 
-router.post('/byid/',checkAuth,(req,res,next)=>{
+router.post('/byid/',(req,res,next)=>{
     const id = req.body.id;
-    SalesOffer.findById(id)
+    casestudy.findById(id)
     .exec()
     .then(doc => {
         console.log("Data From Database"+doc);
@@ -100,11 +119,11 @@ router.post('/byid/',checkAuth,(req,res,next)=>{
 
 router.get('/delete',checkAuth,(req,res,next)=>{
     const id = req.body.id;
-    subcription.deleteOne({ _id: req.body.id })
+    casestudy.deleteOne({ _id: req.body.id })
     .exec()
     .then(result => {
       res.status(200).json({
-        message: "Course deleted"
+        message: "Case Study deleted"
       });
     })
     .catch(err => {
@@ -115,9 +134,9 @@ router.get('/delete',checkAuth,(req,res,next)=>{
     });
 });
 
-router.post('/uid/',checkAuth,(req,res,next)=>{
+router.post('/uid/',(req,res,next)=>{
     const id = req.body.id;
-    salesoffer.find({_id: req.body.id})
+    casestudy.find({_id: req.body.id})
     .select()
     .exec()
     .then(data => {
@@ -133,28 +152,6 @@ router.post('/uid/',checkAuth,(req,res,next)=>{
             res.status(500).json(error);
         });
   });
-  router.post('/name/',checkAuth,(req,res,next)=>{
-    const id = req.body.courseName;
-    subcription.find({courseName: new RegExp(id, 'i')})
-    .select()
-    .exec()
-    .then(data => {
-        console.log("Data From Database"+data);
-        if(data){
-            res.status(200).json({
-                message: "Item Found",
-                data: data
-            });
-        }else{
-            res.status(404).json({message: "Item Not Found"});
-        }
-    })
-    .catch(error => {
-            console.log(error);
-            res.status(500).json(error);
-        });
-});
-
 
 module.exports = router;
 

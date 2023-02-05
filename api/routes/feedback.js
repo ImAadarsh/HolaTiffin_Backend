@@ -9,7 +9,7 @@ const fs = require('fs');
 const checkAuth = require('../middleware/check-auth');
 const cloudinary = require('../utils/cloudinary');  
 const upload = require('../utils/multer');
-const subscribed = require('../models/subscribed');
+const feedback = require('../models/feedback');
 
 // Require System
 function base64Encode(file) {
@@ -18,7 +18,7 @@ function base64Encode(file) {
   }
 
 router.get('/',checkAuth,(req,res,next)=>{
-    subscribed.find()
+    feedback.find()
     .select()
     .exec()
     .then(data => {
@@ -40,22 +40,20 @@ router.get('/',checkAuth,(req,res,next)=>{
     // res.status(200).json({message: 'Product not found'});
 });
 
-router.post('/',checkAuth, (req,res,next)=>{
-    const row = new subscribed(
+router.post('/', checkAuth, (req,res,next)=>{
+    const row = new feedback(
         {
             _id: new mongoose.Types.ObjectId(),
-            courseId: req.body.courseId,
-            userId: req.body.userId,
-            transactionId: req.body.transactionId,
-            amount: req.body.amount,
-            timeStamp: new Date()
+            customerName: req.body.customerName,
+            mobile: req.body.mobile,
+            email: req.body.email
         }
     );
     row.save().then(result=>{
         console.log(result);
         res.status(200).json({
             status: true,
-            message: 'Course is Subscribed successfully.',
+            message: 'Sucessfully Submitted',
             createdCourse: result,
                 });
     }).catch(error=>{
@@ -66,7 +64,7 @@ router.post('/',checkAuth, (req,res,next)=>{
 
 router.post('/byid/',checkAuth,(req,res,next)=>{
     const id = req.body.id;
-    subscribed.findById(id)
+    feedback.findById(id)
     .exec()
     .then(doc => {
         console.log("Data From Database"+doc);
@@ -83,42 +81,8 @@ router.post('/byid/',checkAuth,(req,res,next)=>{
 });
 
 
-router.post('/uid/',checkAuth,(req,res,next)=>{
-    const id = req.body.userId;
-    subscribed.find({userId:id})
-    .select()
-    .exec()
-    .then(data => {
-        // console.log("Data From Database"+data);
-        if(data){
-            res.status(200).json({data});
-        }else{
-            res.status(404).json({message: "Item Not Found"});
-        }
-    })
-    .catch(error => {
-            console.log(error);
-            res.status(500).json(error);
-        });
-  });
-router.post('/cid/',checkAuth,(req,res,next)=>{
-    const id = req.body.courseId;
-    subscribed.find({courseId:id})
-    .select()
-    .exec()
-    .then(data => {
-        // console.log("Data From Database"+data);
-        if(data){
-            res.status(200).json({data});
-        }else{
-            res.status(404).json({message: "Item Not Found"});
-        }
-    })
-    .catch(error => {
-            console.log(error);
-            res.status(500).json(error);
-        });
-  });
+
+
   
 module.exports = router;
 

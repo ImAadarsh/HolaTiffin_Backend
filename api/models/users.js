@@ -15,13 +15,7 @@ const productScheme = mongoose.Schema(
         userType: {
             type: String,
             required: true,
-            enum: ["admin", "user"]
-        },
-        isActive: {type: Boolean, required: true, default: true},
-        userProfile: {type: String}, 
-        resetToken: {
-            type: String,
-            default: null
+            enum: ["admin", "assistant"]
         },
     }
 );
