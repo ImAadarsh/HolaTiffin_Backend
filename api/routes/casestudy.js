@@ -117,7 +117,7 @@ router.post('/byid/',(req,res,next)=>{
         });
 });
 
-router.get('/delete',checkAuth,(req,res,next)=>{
+router.post('/delete',checkAuth,(req,res,next)=>{
     const id = req.body.id;
     casestudy.deleteOne({ _id: req.body.id })
     .exec()

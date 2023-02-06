@@ -46,7 +46,13 @@ router.post('/', checkAuth, (req,res,next)=>{
             _id: new mongoose.Types.ObjectId(),
             customerName: req.body.customerName,
             mobile: req.body.mobile,
-            email: req.body.email
+            email: req.body.email,
+            message: req.body.message,
+            ans1: req.body.ans1,
+            ans2: req.body.ans2,
+            ans3: req.body.ans3,
+            ans4: req.body.ans4,
+            ans5: req.body.ans5,
         }
     );
     row.save().then(result=>{
