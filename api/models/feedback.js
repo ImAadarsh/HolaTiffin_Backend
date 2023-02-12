@@ -14,6 +14,10 @@ const salesofferScheme = mongoose.Schema(
             type: String,
             required: true,
         },
+        assistantId: {
+            type: String,
+            required: true,
+        },
         message: {
             type: String,
         },

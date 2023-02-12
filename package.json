@@ -1,11 +1,11 @@
 {
-  "name": "scaler",
+  "name": "pinnacle",
   "version": "1.1.1",
-  "description": "Backend For Scaler Project By Strix Digital for Debashish",
+  "description": "Backend For Pinnacle",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
