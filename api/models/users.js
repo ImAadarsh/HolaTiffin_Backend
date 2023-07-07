@@ -11,11 +11,12 @@ const productScheme = mongoose.Schema(
             match: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         },
         mobile: {type: String, required: true},
+        active: {type: Boolean, default: true},
         password: {type: String, required: true},
         userType: {
             type: String,
             required: true,
-            enum: ["admin", "assistant"]
+            enum: ["admin", "ambassador"]
         },
     }
 );

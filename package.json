@@ -1,7 +1,7 @@
 {
-  "name": "pinnacle",
+  "name": "TBC",
   "version": "1.1.1",
-  "description": "Backend For Pinnacle",
+  "description": "Backend For TBC",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,10 +12,10 @@
     "url": "git+https://github.com/digitalstrix/scaler-backend.git"
   },
   "keywords": [
-    "scaler",
+    "TBC",
     "backend",
-    "strix",
-    "strix-digital"
+    "Endeavour",
+    "Endeavour-digital"
   ],
   "author": "Aadarsh Gupta\\",
   "license": "ISC",

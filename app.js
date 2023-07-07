@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require("cors");
 
-mongoose.connect('mongodb+srv://pinnacle:pinnacle@pinnacle.wmuz450.mongodb.net/?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://tbc:gEewZPvvJ8lWFow1@tbc.foqhnug.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -24,13 +24,13 @@ app.use(bodyParser.json());
 // API Routes ........................................................
 const casestudyRoute = require('./api/routes/casestudy');
 const usersRoute = require('./api/routes/users');
-const contactRoute = require('./api/routes/contact');
+const Addresses = require('./api/routes/addresses');
 const feedbackRoute = require('./api/routes/feedback');
 
 // End API Routes ....................................................
 app.use('/casestudy', casestudyRoute);
 app.use('/user', usersRoute);
-app.use('/contact', contactRoute);
+app.use('/addresses', Addresses);
 app.use('/feedback', feedbackRoute);
 
 // No Route Error Handler
@@ -52,7 +52,7 @@ app.use((error, req, res, next) => {
 
 const http = require('http');
 // const app = require('./app');
-const port = 5000;
+const port = 5001;
 const server = http.createServer(app);
 server.listen(port);
 module.exports = app;
