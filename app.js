@@ -7,10 +7,13 @@ const cors = require("cors");
 require("dotenv").config();
 const fs = require('fs'); 
 
-mongoose.connect('mongodb://my_user:1%40Aadarsh@127.0.0.1:27017/test', {
+mongoose.connect('mongodb+srv://tbc:gEewZPvvJ8lWFow1@tbc.foqhnug.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
+
+// mongodb+srv://tbc:gEewZPvvJ8lWFow1@tbc.foqhnug.mongodb.net/?retryWrites=true&w=majority
+// mongodb://my_user:1%40Aadarsh@127.0.0.1:27017/test
 
 const corsOptions = {
     origin: '*',
