@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const users = require('./users');
 const express = require('express') ;
+const { json } = require('body-parser');
 const router  = express.Router();
 
 const tbcAddresses = mongoose.Schema(
@@ -38,6 +39,10 @@ const tbcAddresses = mongoose.Schema(
             type: String,
             required: true,
         },
+        item: {
+            type: Array,
+            required: true,
+        },
         timeStamp: {
             type: Date,
             default: Date.now,
@@ -73,6 +78,10 @@ const tbcAddresses = mongoose.Schema(
         shipping: {
             type: Number,
             default: null,
+        },
+        deliveryChoice: {
+            type: String,
+            default: "Leave at the door",
         },
         tip: {
             type: Number,
