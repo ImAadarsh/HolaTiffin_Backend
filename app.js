@@ -41,23 +41,29 @@ app.use('/addresses', Addresses);
 app.use('/feedback', feedbackRoute);
 app.use('/amountSent', amountRoute);
 app.post('/places', async (req, res, next) => {
-    try {
-      const input = req.body.input; // Assuming the input is sent in the request body
-      // Construct the URL with the input and Google Maps API key
-      console.log(input);
-      const googleMapsApiUrl = `https://maps.googleapis.com/maps/api/place/queryautocomplete/json?input=${encodeURIComponent(
-        input
-      )}&key=${process.env.GOOGLE_MAP_API}`;
-  
-      // Make the HTTP request to the Google Maps API
-      const response = await axios.get(googleMapsApiUrl);
-      // Return the results from the Google Maps API as the response
-      res.json(response.data);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Something went wrong' });
-    }
-  });
+  try {
+    const input = req.body.input; // Assuming the input is sent in the request body
+    // Construct the URL with the input and Google Maps API key
+    const googleMapsApiUrl = `https://maps.googleapis.com/maps/api/place/queryautocomplete/json?input=${encodeURIComponent(
+      input
+    )}&key=${process.env.GOOGLE_MAP_API}`;
+
+    // Make the HTTP request to the Google Maps API
+    const response = await axios.get(googleMapsApiUrl);
+
+    // Extract the 'description' and 'place_id' from all the predictions
+    const predictions = response.data.predictions.map((prediction) => ({
+      description: prediction.description,
+      place_id: prediction.place_id,
+    }));
+
+    // Return the results with 'description' and 'place_id'
+    res.json(predictions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
 
   app.post('/get-place-details', async (req, res) => {
     try {
