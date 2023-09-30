@@ -7,6 +7,9 @@ const cors = require("cors");
 require("dotenv").config();
 const fs = require('fs'); 
 const axios = require('axios');
+const AWS = require('aws-sdk');
+const AWSFileUpload = require("express-fileupload");
+AWS.config.update({region: process.env.AWS_REGION});
 
 mongoose.connect('mongodb+srv://tbc:gEewZPvvJ8lWFow1@tbc.foqhnug.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser: true,
@@ -116,7 +119,7 @@ app.post('/places', async (req, res, next) => {
 
 // No Route Error Handler
 app.use((req, res, next) => {
-    const error = new Error('Uri Not Found');
+    const error = new Error('Uri Not Found The Tiffin');
     error.status = 404;
     next(error);
 });
