@@ -20,19 +20,29 @@ const salesofferScheme = mongoose.Schema(
             type: String,
             required: true
         },
-        Video: {
+        description: {
             type: String,
             required: true
         },
-        shift: {
+        day: {
             type: String,
             required: true,
-            enum: ["morning", "night","late_night"]
+            enum: ["mon", "tue","wed","thu","fri","sat","sun"]
         },
-        isAllDay: {
-            type: Boolean,
-            default: false
+        spicy: {
+            type: String,
+            required: true,
+            enum: ["medium", "spicy"]
+        },
+        food_type: {
+            type: String,
+            required: true,
+            enum: ["veg", "non_veg"]
+        },
+        nutrition: {
+            type: String,
+            required: true
         }
     }
 );
-module.exports = mongoose.model('product', salesofferScheme); 
+module.exports = mongoose.model('dishes', salesofferScheme); 

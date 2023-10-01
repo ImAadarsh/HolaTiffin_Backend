@@ -15,6 +15,7 @@ mongoose.connect('mongodb+srv://tbc:gEewZPvvJ8lWFow1@tbc.foqhnug.mongodb.net/?re
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
+mongoose.set('strictQuery', false); // Set to true if you want to suppress the warning
 
 // mongodb+srv://tbc:gEewZPvvJ8lWFow1@tbc.foqhnug.mongodb.net/?retryWrites=true&w=majority
 // mongodb://my_user:1%40Aadarsh@127.0.0.1:27017/test
@@ -36,13 +37,19 @@ const usersRoute = require('./api/routes/users');
 const Addresses = require('./api/routes/addresses');
 const feedbackRoute = require('./api/routes/feedback');
 const amountRoute = require('./api/routes/amountSent');
+const dishesRoute = require('./api/routes/dishes');
+const orderPlacedRoute = require('./api/routes/placedOrders');
+const pincodeRoute = require('./api/routes/pincodes');
 
-// End API Routes ....................................................
+// End API Routes .......................................................
 app.use('/order', orderRoute);
+app.use('/placedOrder', orderPlacedRoute);
+app.use('/dishes', dishesRoute);
 app.use('/user', usersRoute);
 app.use('/addresses', Addresses);
 app.use('/feedback', feedbackRoute);
 app.use('/amountSent', amountRoute);
+app.use('/pincode', pincodeRoute);
 app.post('/places', async (req, res, next) => {
   try {
     const input = req.body.input; // Assuming the input is sent in the request body

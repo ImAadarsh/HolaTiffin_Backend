@@ -9,7 +9,7 @@ const fs = require('fs');
 const checkAuth = require('../middleware/check-auth');
 const cloudinary = require('../utils/cloudinary');  
 const upload = require('../utils/multer');
-const product = require('../models/product');
+const product = require('../models/dishes');
 
 // Require System
 function base64Encode(file) {
@@ -39,19 +39,66 @@ router.get('/',(req,res,next)=>{
     })
     // res.status(200).json({message: 'Product not found'});
 });
+router.get('/filter', (req, res, next) => {
+  const query = {}; // Initialize an empty query object
+
+  // Check if 'name' query parameter is present
+  if (req.query.name) {
+    query.name = req.query.name;
+  }
+
+  // Check if 'day' query parameter is present and valid
+  if (req.query.day && ["mon", "tue", "wed", "thu", "fri", "sat", "sun"].includes(req.query.day)) {
+    query.day = req.query.day;
+  }
+
+  // Check if 'spicy' query parameter is present and valid
+  if (req.query.spicy && ["medium", "spicy"].includes(req.query.spicy)) {
+    query.spicy = req.query.spicy;
+  }
+
+  // Check if 'food_type' query parameter is present and valid
+  if (req.query.food_type && ["veg", "non_veg"].includes(req.query.food_type)) {
+    query.food_type = req.query.food_type;
+  }
+
+  // Check if 'nutrition' query parameter is present
+  if (req.query.nutrition) {
+    query.nutrition = req.query.nutrition;
+  }
+
+  // Use the query object to filter the data
+  product.find(query)
+    .exec()
+    .then(data => {
+      if (data.length > 0) {
+        const response = {
+          message: 'Data Fetched successfully',
+          count: data.length,
+          data: data,
+        };
+        res.status(200).json(response);
+      } else {
+        res.status(404).json({ message: 'No matching dishes found' });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ error: err });
+    });
+});
 
 router.post('/',checkAuth,  upload.fields([
     {
-      name: "icon",
+      name: "image1",
       maxCount: 1,
     },
     {
-      name: "link",
+      name: "image2",
       maxCount: 1,
     }
   ]), async (req,res,next)=>{
     try {
-        path0 = req.files.icon[0];
+        path0 = req.files.image1[0];
         var base64String = base64Encode(path0.path);
         const uploadString = "data:image/jpeg;base64," + base64String;
         const uploadResponse = await cloudinary.uploader.upload(uploadString, {
@@ -64,7 +111,7 @@ router.post('/',checkAuth,  upload.fields([
         console.log(e);
       }
       try {
-        path1 = req.files.link[0];
+        path1 = req.files.image2[0];
         var base64String = base64Encode(path1.path);
         const uploadString = "data:image/jpeg;base64," + base64String;
         const uploadResponse = await cloudinary.uploader.upload(uploadString, {
@@ -79,10 +126,16 @@ router.post('/',checkAuth,  upload.fields([
     const row = new product(
         {
             _id: new mongoose.Types.ObjectId(),
-            link: url1,
-            icon: url0,
+            image1: url1,
+            image2: url0,
             name: req.body.name,
-            text: req.body.text,
+            spicy: req.body.spicy,
+            nutrition: req.body.nutrition,
+            day: req.body.day,
+            price: req.body.price,
+            description: req.body.description,
+            food_type: req.body.food_type,
+            
         }
     );
     row.save().then(result=>{
@@ -101,6 +154,7 @@ router.post('/',checkAuth,  upload.fields([
 
 router.post('/byid/',(req,res,next)=>{
     const id = req.body.id;
+    console.log(id);
     product.findById(id)
     .exec()
     .then(doc => {

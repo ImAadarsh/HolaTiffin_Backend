@@ -12,11 +12,12 @@ const productScheme = mongoose.Schema(
         },
         mobile: {type: String, required: true},
         active: {type: Boolean, default: true},
-        password: {type: String, required: true},
+        password: {type: String},
         userType: {
             type: String,
             required: true,
-            enum: ["admin", "ambassador"]
+            default: "user",
+            enum: ["admin", "ambassador","user"]
         },
     }
 );

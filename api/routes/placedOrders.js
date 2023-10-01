@@ -12,6 +12,7 @@ const upload = require('../utils/multer');
 const order = require('../models/order');
 const Address = require('../models/addresses');
 const placedOrder = require('../models/placedOrder');
+const users = require('../models/users');
 
 // Require System
 function base64Encode(file) {
@@ -22,7 +23,7 @@ function base64Encode(file) {
   
  
 router.get('/',(req,res,next)=>{
-    order.find()
+    placedOrder.find()
     .select()
     .exec()
     .then(data => {
@@ -44,71 +45,81 @@ router.get('/',(req,res,next)=>{
     // res.status(200).json({message: 'order not found'});
 });
 
-router.post('/',checkAuth, async (req,res,next)=>{
+// Inside your order route
+router.post('/', async (req, res) => {
+
   try {
-    const {
-      email,
-      phone,
+    // Get user details from the request body
+    const { name, email, mobile, orderedItems, tip, totalPaid, shipping, isPlaced, paymentId, cardNumber, address, city, state, zipCode, spicy } = req.body;
+console.log(req.body);
+    // Find the user by email
+    let user = await users.findOne({ email });
+
+    // If the user does not exist, create a new user entry
+    if (!user) {
+      const user = new users({
+        _id: new mongoose.Types.ObjectId(),
+        name,
+        email,
+        mobile,
+        userType : "user"
+      });
+      await user.save();
+    }
+
+    // Calculate delivery dates based on the selected days
+    const currentDate = new Date();
+    const currentDay = currentDate.getDay();
+    console.log(currentDate);
+
+    for (const item of orderedItems) {
+       deliveryDates = null;
+
+      for (const selectedDay of item.selectedDays) {
+        
+        daysUntilDelivery = (selectedDay - currentDay + 7) % 7;
+        const deliveryDate = new Date(currentDate);
+        if(currentDay==selectedDay){
+          daysUntilDelivery = 7;
+        }
+        deliveryDate.setDate(currentDate.getDate() + daysUntilDelivery);
+        deliveryDates = deliveryDate;
+      }
+
+      item.deliveryDates = deliveryDates;
+    }
+
+    // Create a new order
+    const order = new placedOrder({
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+      },
+      orderedItems,
+      tip,
+      totalPaid,
+      shipping,
+      isPlaced,
+      paymentId,
+      cardNumber,
       address,
       city,
       state,
       zipCode,
-      item,
-      isSchedule,
-      scheduleTime,
-      isPlaced,
-      paymentId,
-      cardNumber,
-      couponCode,
-      discount,
-      shipping,
-      tip,
-      totalPaid,
-      deliveryChoice
-    } = req.body;
-
-    // Check if the address already exists in the database
-    const addressExists = await Address.findOne({ address, city, state, zipCode });
-    const isRefered = addressExists ? true : false;
-    // If the address exists, use its ambassadorId for the order
-    // Otherwise, set ambassadorId to null
-    const orderAmbassadorId = addressExists ? addressExists.ambassadorId : null;
-
-    // Create the new order
-    const newOrder = new order({
-      _id: new mongoose.Types.ObjectId(),
-      email,
-      phone,
-      isRefered,
-      ambassadorId: orderAmbassadorId,
-      address,
-      city,
-      state,
-      zipCode,
-      item,
-      timeStamp: Date.now(),
-      isSchedule,
-      scheduleTime,
-      isPlaced,
-      paymentId,
-      cardNumber,
-      couponCode,
-      discount,
-      shipping,
-      tip,
-      totalPaid,
-      deliveryChoice
+      spicy,
     });
 
     // Save the order to the database
-    await newOrder.save();
+    await order.save();
 
-    res.status(201).json({ message: 'Order created successfully', order: newOrder });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(201).json({ message: 'Order placed successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
+
 
 
 router.post('/getOrdersByAmbassadorId/',checkAuth, async (req,res,next)=>{
