@@ -43,29 +43,19 @@ router.get('/filter', (req, res, next) => {
   const query = {}; // Initialize an empty query object
 
   // Check if 'name' query parameter is present
-  if (req.query.name) {
-    query.name = req.query.name;
-  }
+
 
   // Check if 'day' query parameter is present and valid
   if (req.query.day && ["mon", "tue", "wed", "thu", "fri", "sat", "sun"].includes(req.query.day)) {
     query.day = req.query.day;
   }
 
-  // Check if 'spicy' query parameter is present and valid
-  if (req.query.spicy && ["medium", "spicy"].includes(req.query.spicy)) {
-    query.spicy = req.query.spicy;
-  }
-
   // Check if 'food_type' query parameter is present and valid
-  if (req.query.food_type && ["veg", "non_veg"].includes(req.query.food_type)) {
-    query.food_type = req.query.food_type;
-  }
+  // if (req.query.food_type && ["veg", "non_veg"].includes(req.query.food_type)) {
+  //   query.food_type = req.query.food_type;
+  // }
 
-  // Check if 'nutrition' query parameter is present
-  if (req.query.nutrition) {
-    query.nutrition = req.query.nutrition;
-  }
+ console.log(query);
 
   // Use the query object to filter the data
   product.find(query)
