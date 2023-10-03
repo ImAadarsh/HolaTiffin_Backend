@@ -47,7 +47,7 @@ router.get('/filter', (req, res, next) => {
 
   // Check if 'day' query parameter is present and valid
   if (req.query.day && ["mon", "tue", "wed", "thu", "fri", "sat", "sun"].includes(req.query.day)) {
-    query.day = req.query.day;
+    query = {day: req.query.day, food_time: req.query.food_time}
   }
 
   // Check if 'food_type' query parameter is present and valid
@@ -121,6 +121,7 @@ router.post('/',checkAuth,  upload.fields([
             name: req.body.name,
             spicy: req.body.spicy,
             nutrition: req.body.nutrition,
+            food_time: req.body.food_time,
             day: req.body.day,
             price: req.body.price,
             description: req.body.description,

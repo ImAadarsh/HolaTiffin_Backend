@@ -39,6 +39,11 @@ const salesofferScheme = mongoose.Schema(
             required: true,
             enum: ["veg", "non_veg"]
         },
+        food_time: {
+            type: String,
+            required: true,
+            enum: ["lunch", "dinner"]
+        },
         nutrition: {
             type: String,
             required: true
