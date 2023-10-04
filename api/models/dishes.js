@@ -25,24 +25,24 @@ const salesofferScheme = mongoose.Schema(
             required: true
         },
         day: {
-            type: String,
+            type: Array,
             required: true,
-            enum: ["mon", "tue","wed","thu","fri","sat","sun"]
+            // enum: ["mon", "tue","wed","thu","fri","sat","sun"]
         },
         spicy: {
             type: String,
             required: true,
-            enum: ["medium", "spicy"]
+            // enum: ["medium", "spicy"]
         },
         food_type: {
             type: String,
             required: true,
-            enum: ["veg", "non_veg"]
+            // enum: ["veg", "non_veg"]
         },
         food_time: {
             type: String,
             required: true,
-            enum: ["lunch", "dinner"]
+            // enum: ["lunch", "dinner"]
         },
         nutrition: {
             type: String,
