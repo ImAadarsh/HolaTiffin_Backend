@@ -39,6 +39,7 @@ router.get('/', (req, res, next) => {
     })
   // res.status(200).json({message: 'Product not found'});
 });
+
 router.get('/filter', (req, res, next) => {
   var query = {}; // Initialize an empty query object
 
