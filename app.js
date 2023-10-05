@@ -55,9 +55,10 @@ app.use('/pincode', pincodeRoute);
 app.post('/create-payment', async (req, res) => {
   let {amount}=req.body;
   console.log(amount);
+  amount = amount*100;
   const paymentIntent = await stripe.paymentIntents.create({
     amount, // Specify amount here
-    currency: "usd" // Specify currency here
+    currency: "inr" // Specify currency here
   });
   res.send({
     clientSecret: paymentIntent.client_secret
