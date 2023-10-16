@@ -87,6 +87,22 @@ router.get('/filter', (req, res, next) => {
       res.status(500).json({ error: err });
     });
 });
+router.get('/days', (req, res, next) => {
+  const daysOfWeek = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]; // Define the sequence of days
+
+  const currentDate = new Date(); // Get the current date
+  const currentDay = currentDate.getDay(); // Get the current day as an index (0 for Sunday, 1 for Monday, etc.)
+
+  // Calculate the index for each day in the sequence starting from the day after the current day
+  const indexedDays = daysOfWeek.map((day, index) => {
+    const dayIndex = (currentDay  + index) % 7;
+    return { day: daysOfWeek[dayIndex], index };
+  });
+
+  // Send the indexed days as a response
+  res.status(200).json(indexedDays);
+});
+
 
 router.post('/', checkAuth, upload.fields([
   {
