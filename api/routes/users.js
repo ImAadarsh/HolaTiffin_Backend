@@ -7,6 +7,7 @@ const multer = require('multer');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const users = require('../models/users');
+const emails = require('../models/emails');
 const nodemail = require('../utils/nodemailer');
 const checkAuth = require('../middleware/check-auth');
 const upload = require('../utils/multer');
@@ -216,6 +217,26 @@ router.post('/uid/',checkAuth,(req,res,next)=>{
           console.log(error);
           res.status(500).json(error);
       });
+});
+
+router.post('/emailAdd', (req, res, next) => {
+  const row = new emails(
+      {
+          _id: new mongoose.Types.ObjectId(),
+          email: req.body.email,
+          message: req.body.message
+      }
+  );
+  row.save().then(result => {
+      console.log(result);
+      res.status(200).json({
+          status: true,
+          message: 'Email Added Sucessfully'
+      });
+  }).catch(error => {
+      console.log(error);
+      res.status(500).json(error);
+  });
 });
 module.exports = router;
 
