@@ -24,7 +24,7 @@ function base64Encode(file) {
  
 router.get('/',(req,res,next)=>{
     placedOrder.find()
-    .select()
+    .select().populate('user')
     .exec()
     .then(data => {
         if(data){
