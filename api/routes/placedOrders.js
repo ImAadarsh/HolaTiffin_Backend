@@ -4,6 +4,7 @@ const router  = express.Router();
 const mongoose = require('mongoose');
 const { json } = require('body-parser');
 const fs = require('fs');
+const request = require('request');
 
 // Require Files
 const checkAuth = require('../middleware/check-auth');
@@ -46,79 +47,160 @@ router.get('/',(req,res,next)=>{
 });
 
 // Inside your order route
-router.post('/', async (req, res) => {
+  router.post('/', async (req, res) => {
 
-  try {
-    // Get user details from the request body
-    const { name, email, mobile, orderedItems, tip, totalPaid, shipping, isPlaced, paymentId, cardNumber, address, city, state, zipCode, spicy } = req.body;
-console.log(req.body);
-    // Find the user by email
-    let user = await users.findOne({ email });
+    try {
+      // Get user details from the request body
+      const { name, email, mobile, orderedItems, tip, totalPaid, shipping, isPlaced, paymentId, cardNumber, address, city, state, zipCode, spicy } = req.body;
+  // console.log(req.body); ---------------
+      // Find the user by email
+      let user = await users.findOne({ email });
 
-    // If the user does not exist, create a new user entry
-    if (!user) {
-      const user = new users({
-        _id: new mongoose.Types.ObjectId(),
-        name,
-        email,
-        mobile,
-        userType : "user"
-      });
-      await user.save();
-    }
-
-    // Calculate delivery dates based on the selected days
-    const currentDate = new Date();
-    const currentDay = currentDate.getDay();
-    console.log(currentDate);
-
-    for (const item of orderedItems) {
-       deliveryDates = null;
-
-      for (const selectedDay of item.selectedDays) {
-        
-        daysUntilDelivery = (selectedDay - currentDay + 7) % 7;
-        const deliveryDate = new Date(currentDate);
-        if(currentDay==selectedDay){
-          daysUntilDelivery = 7;
-        }
-        deliveryDate.setDate(currentDate.getDate() + daysUntilDelivery);
-        deliveryDates = deliveryDate;
+      // If the user does not exist, create a new user entry
+      if (!user) {
+        const user = new users({
+          _id: new mongoose.Types.ObjectId(),
+          name,
+          email,
+          mobile,
+          userType : "user"
+        });
+        await user.save();
       }
 
-      item.deliveryDates = deliveryDates;
-    }
+      // Calculate delivery dates based on the selected days
+      const currentDate = new Date();
+      const currentDay = currentDate.getDay();
+      // console.log(currentDate);
 
-    // Create a new order
-    const order = new placedOrder({
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        mobile: user.mobile,
-      },
-      orderedItems,
-      tip,
-      totalPaid,
-      shipping,
-      isPlaced,
-      paymentId,
-      cardNumber,
-      address,
-      city,
-      state,
-      zipCode,
-      spicy,
-    });
+      for (const item of orderedItems) {
+        deliveryDates = null;
 
-    // Save the order to the database
-    await order.save();
+        for (const selectedDay of item.selectedDays) {
+          
+          daysUntilDelivery = (selectedDay - currentDay + 7) % 7;
+          const deliveryDate = new Date(currentDate);
+          if(currentDay==selectedDay){
+            daysUntilDelivery = 7;
+          }
+          deliveryDate.setDate(currentDate.getDate() + daysUntilDelivery);
+          deliveryDates = deliveryDate;
+        }
 
-    res.status(201).json({ message: 'Order placed successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+        item.deliveryDates = deliveryDates;
+      }
+
+      // Create a new order
+      const order = new placedOrder({
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          mobile: user.mobile,
+        },
+        orderedItems,
+        tip,
+        totalPaid,
+        shipping,
+        isPlaced,
+        paymentId,
+        cardNumber,
+        address,
+        city,
+        state,
+        zipCode,
+        spicy,
+      });
+
+      // Save the order to the database
+      await order.save();
+      const retrievedOrder = await placedOrder
+      .findById(order._id)
+      .populate('orderedItems.foodItemId')
+      .populate('user');
+
+      // console.log();
+      const r_id = retrievedOrder._id;
+      const u_id = retrievedOrder.user._id;
+      const m_id = retrievedOrder.user.mobile;
+      const e_id = retrievedOrder.user.email;
+      const a = retrievedOrder.address;
+      const c = retrievedOrder.city;
+      const s = retrievedOrder.state;
+      const z = retrievedOrder.zipCode;
+      const n = retrievedOrder.user.name;
+// Assuming you have your order object as `order`
+
+// Create an empty object to store items grouped by delivery date
+const groupedItems = {};
+
+// Iterate through the ordered items
+for (const item of retrievedOrder.orderedItems) {
+  const deliveryDate = item.deliveryDates.toISOString().split('T')[0]; // Extract the date in YYYY-MM-DD format
+  if (!groupedItems[deliveryDate]) {
+    groupedItems[deliveryDate] = [];
   }
+  
+
+  // Add the item to the group
+  groupedItems[deliveryDate].push({
+    id: item.foodItemId._id, // You can use a unique identifier for the item
+    sku: item.foodItemId.name, // Replace with actual SKU
+    description: item.foodItemId.description, // Replace with actual description
+    quantity: 1, // You can calculate the quantity as needed
+    photo_url: item.foodItemId.image1
+  });
+}
+// console.log(groupedItems);
+
+// Convert the grouped items into the desired format
+
+const formattedData = [];
+for (const date in groupedItems) {
+  formattedData.push({
+    id: r_id, // Replace with an actual ID
+    type: 'Delivery',
+    do_number: 'DO '+r_id, // Replace with the appropriate DO number
+    date: date,
+    tracking_number: u_id, // Replace with the tracking number
+    order_number: r_id, // Replace with the order number
+    address: a, // Replace with the address
+    city: c,
+    state: s,
+    postal_code: z,
+    instructions: n,
+    deliver_to_collect_from: 'Parth Sajnani', // Replace with the name
+    phone_number: m_id, // Replace with the phone number // Replace with the fax number
+    notify_email: e_id, // Replace with the email address
+    items: groupedItems[date],
+  });
+}
+console.log(formattedData); 
+// Define the options for the POST request
+var options = {
+  method: 'POST',
+  url: 'https://app.detrack.com/api/v2/dn/jobs/bulk',
+  headers: {
+    'X-API-KEY': '060108bd77a64e5901025b9180f568d592719e0b851e510a',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ data: formattedData }),
+};
+
+// Send the POST request
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
 });
+// console.log();
+
+// The 'formattedData' variable now contains the desired data structure.
+
+      res.status(201).json({ message: 'Order placed successfully'});
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
 
 
 
