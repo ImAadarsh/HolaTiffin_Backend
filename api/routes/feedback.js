@@ -10,6 +10,7 @@ const checkAuth = require('../middleware/check-auth');
 const cloudinary = require('../utils/cloudinary');
 const upload = require('../utils/multer');
 const feedback = require('../models/feedback');
+const emails = require('../models/emails');
 
 // Require System
 function base64Encode(file) {
@@ -18,7 +19,7 @@ function base64Encode(file) {
 }
 
 router.get('/', checkAuth, (req, res, next) => {
-    feedback.find()
+    emails.find()
         .select()
         .exec()
         .then(data => {

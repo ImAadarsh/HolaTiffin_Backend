@@ -122,7 +122,7 @@ router.post("/signup",(req, res, next) => {
 
   
 
-  router.delete("/:userId",checkAuth, (req, res, next) => {
+  router.delete("/:userId", (req, res, next) => {
     User.deleteOne({ _id: req.params.userId })
       .exec()
       .then(result => {
@@ -224,7 +224,8 @@ router.post('/emailAdd', (req, res, next) => {
       {
           _id: new mongoose.Types.ObjectId(),
           email: req.body.email,
-          message: req.body.message
+          message: req.body.message,
+          subject: req.body.subject
       }
   );
   row.save().then(result => {
@@ -237,6 +238,27 @@ router.post('/emailAdd', (req, res, next) => {
       console.log(error);
       res.status(500).json(error);
   });
+});
+
+router.get('/getEmail',(req, res, next) => {
+  emails.find()
+      .select()
+      .exec()
+      .then(data => {
+          if (data) {
+              const respose = {
+                  message: 'Data Fetched successfully',
+                  count: data.length,
+                  data: data,
+              };
+              res.status(200).json(respose);
+          } else {
+              res.status(404).json({ message: 'Subcription not found' });
+          }
+      })
+      .catch(err => {
+          res.status(500).json(err);
+      })
 });
 module.exports = router;
 

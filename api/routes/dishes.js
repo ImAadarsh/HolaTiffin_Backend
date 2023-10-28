@@ -175,10 +175,10 @@ router.post('/byid/', (req, res, next) => {
   console.log(id);
   product.findById(id)
     .exec()
-    .then(doc => {
-      console.log("Data From Database" + doc);
-      if (doc) {
-        res.status(200).json(doc);
+    .then(data => {
+      console.log("Data From Database" + data);
+      if (data) {
+        res.status(200).json({data});
       } else {
         res.status(404).json({ message: "Item Not Found" });
       }
@@ -195,7 +195,7 @@ router.post('/delete', checkAuth, (req, res, next) => {
     .exec()
     .then(result => {
       res.status(200).json({
-        message: "Case Study deleted"
+        message: "Dish deleted"
       });
     })
     .catch(err => {
@@ -214,7 +214,7 @@ router.post('/uid/', (req, res, next) => {
     .then(data => {
       // console.log("Data From Database"+data);
       if (data) {
-        res.status(200).json({ data });
+        res.status(200).json({data});
       } else {
         res.status(404).json({ message: "Item Not Found" });
       }

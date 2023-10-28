@@ -31,7 +31,7 @@ const salesofferScheme = mongoose.Schema(
         },
         spicy: {
             type: String,
-            required: true,
+         
             // enum: ["medium", "spicy"]
         },
         food_type: {
@@ -46,7 +46,7 @@ const salesofferScheme = mongoose.Schema(
         },
         nutrition: {
             type: String,
-            required: true
+
         }
     }
 );

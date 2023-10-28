@@ -7,6 +7,12 @@ const salesofferScheme = mongoose.Schema(
         email: {
             type: String,
             required: true
+        },
+        subject: {
+            type: String,
+        },
+        message: {
+            type: String,
         }
     }
 );

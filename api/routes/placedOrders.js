@@ -212,11 +212,11 @@ router.post('/delete',checkAuth,(req,res,next)=>{
 
 router.post('/uid/',(req,res,next)=>{
     const id = req.body.id;
-    order.find({_id: req.body.id})
+    placedOrder.find({_id: req.body.id})
     .select()
     .exec()
     .then(data => {
-        // console.log("Data From Database"+data);
+        console.log("Data From Database"+data);
         if(data){
             res.status(200).json({data});
         }else{
@@ -227,6 +227,33 @@ router.post('/uid/',(req,res,next)=>{
             console.log(error);
             res.status(500).json(error);
         });
+  });
+
+  router.post('/delivery', async (req, res) => {
+    const deliveryDate  = req.body.date;
+    if (!deliveryDate) {
+      return res.status(400).json({ error: 'Delivery date is required' });
+    }
+  
+    const startDate = new Date(deliveryDate);
+    startDate.setHours(0, 0, 0, 0); // Set time to the beginning of the day
+    const endDate = new Date(deliveryDate);
+    endDate.setHours(23, 59, 59, 999); // Set time to the end of the day
+  
+    try {
+      const orders = await placedOrder.find({
+        'orderedItems.deliveryDates': { $gte: startDate, $lte: endDate },
+      }).populate('orderedItems.foodItemId').populate('user');
+  
+      if (orders.length === 0) {
+        return res.status(404).json({ message: 'No orders found for the given delivery date' });
+      }
+  
+      res.json({orders});
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
   });
 
 module.exports = router;

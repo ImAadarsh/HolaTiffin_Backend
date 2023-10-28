@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Pincode = require('../models/pincodes'); // Import the Pincode model
+const pincodes = require('../models/pincodes');
 
 // POST API to upload pincode values to the database
 router.post('/upload-pincodes', async (req, res) => {
@@ -45,8 +46,8 @@ router.post('/upload-pincodes', async (req, res) => {
 
 router.get('/', (req, res) => {
     Pincode.find()
-      .then((pincodes) => {
-        res.json(pincodes);
+      .then((data) => {
+        res.json({data});
       })
       .catch((error) => {
         console.error('Error fetching pincodes:', error);
@@ -54,9 +55,8 @@ router.get('/', (req, res) => {
       });
   });
 
-  router.delete('/:id', (req, res) => {
-    const pincodeId = req.params.id;
-  
+  router.post('/delete', (req, res) => {
+    const pincodeId = req.body.id;
     Pincode.findByIdAndRemove(pincodeId)
       .then((removedPincode) => {
         if (!removedPincode) {
@@ -85,5 +85,24 @@ router.get('/', (req, res) => {
         res.status(500).json({ message: 'An error occurred while checking pincode existence.' });
       });
   });
+  router.post('/save', (req, res, next) => {
+    const row = new pincodes(
+        {
+            _id: new mongoose.Types.ObjectId(),
+            pincode: req.body.pincode,
+        }
+    );
+    row.save().then(result => {
+        console.log(result);
+        res.status(200).json({
+            status: true,
+            message: 'Sucessfully Submitted',
+            createdCourse: result,
+        });
+    }).catch(error => {
+        console.log(error);
+        res.status(500).json(error);
+    });
+});
 
 module.exports = router;

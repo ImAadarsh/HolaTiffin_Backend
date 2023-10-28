@@ -10,7 +10,7 @@ const orderSchema = mongoose.Schema({
     {
       foodItemId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Dish',
+        ref: 'dishes',
         required: true,
       },
       deliveryDates: {
@@ -61,6 +61,9 @@ const orderSchema = mongoose.Schema({
     zipCode: {
         type: String,
         required: true,
+    },
+    spicy: {
+        type: String,
     }
 });
 
