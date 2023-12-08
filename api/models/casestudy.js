@@ -18,4 +18,4 @@ const salesofferScheme = mongoose.Schema(
         },
     }
 );
-module.exports = mongoose.model('CaseStudy', salesofferScheme); 
+module.exports = mongoose.model('CaseStudy_new', salesofferScheme); 

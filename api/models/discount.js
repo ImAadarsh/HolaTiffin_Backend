@@ -23,4 +23,4 @@ const salesofferScheme = mongoose.Schema(
         }
     }
 );
-module.exports = mongoose.model('discounts', salesofferScheme); 
+module.exports = mongoose.model('discounts_new', salesofferScheme); 

@@ -93,4 +93,4 @@ const tbcAddresses = mongoose.Schema(
         },
     }
 );
-module.exports = mongoose.model('order', tbcAddresses); 
+module.exports = mongoose.model('order_new', tbcAddresses); 

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const orderSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'User_new',
     required: true,
   },
   orderedItems: [
@@ -67,4 +67,4 @@ const orderSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('placedOrder', orderSchema);
+module.exports = mongoose.model('placedOrder_new', orderSchema);

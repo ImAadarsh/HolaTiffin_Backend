@@ -40,4 +40,4 @@ const tbcAddresses = mongoose.Schema(
           },
     }
 );
-module.exports = mongoose.model('addresses', tbcAddresses); 
+module.exports = mongoose.model('addresses_new', tbcAddresses); 

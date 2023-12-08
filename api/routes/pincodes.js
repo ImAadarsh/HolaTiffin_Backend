@@ -26,7 +26,7 @@ router.post('/upload-pincodes', async (req, res) => {
         // Create a new pincode document
         const pincodeDocument = new Pincode({
         //   _id: mongoose.Schema.Types.ObjectId,
-          pincode: parseInt(pincodeValue), // Convert the value to an integer
+          pincode: pincodeValue, // Convert the value to an integer
         });
 
         // Add the pincode document to the array

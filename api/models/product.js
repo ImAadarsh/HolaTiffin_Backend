@@ -35,4 +35,4 @@ const salesofferScheme = mongoose.Schema(
         }
     }
 );
-module.exports = mongoose.model('product', salesofferScheme); 
+module.exports = mongoose.model('product_new', salesofferScheme); 

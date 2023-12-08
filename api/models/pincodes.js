@@ -5,9 +5,9 @@ const salesofferScheme = mongoose.Schema(
     {
         _id: mongoose.Schema.Types.ObjectId,
         pincode: {
-            type: Number,
+            type: String,
             required: true
         }
     }
 );
-module.exports = mongoose.model('pincodes', salesofferScheme); 
+module.exports = mongoose.model('pincode_new', salesofferScheme); 

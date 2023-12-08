@@ -104,7 +104,7 @@ router.get('/days', (req, res, next) => {
 });
 
 
-router.post('/', checkAuth, upload.fields([
+router.post('/', upload.fields([
   {
     name: "image1",
     maxCount: 1,

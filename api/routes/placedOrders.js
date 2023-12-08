@@ -317,14 +317,18 @@ router.post('/uid/',(req,res,next)=>{
       return res.status(400).json({ error: 'Delivery date is required' });
     }
   
-    const startDate = new Date(deliveryDate);
-    startDate.setHours(0, 0, 0, 0); // Set time to the beginning of the day
-    const endDate = new Date(deliveryDate);
-    endDate.setHours(23, 59, 59, 999); // Set time to the end of the day
+    const startDate = new Date(`${deliveryDate}T00:00:00.000Z`);
+    const endDate = new Date(`${deliveryDate}T23:59:59.999Z`);
+    console.log(startDate);
+    console.log(endDate);
+
   
     try {
       const orders = await placedOrder.find({
-        'orderedItems.deliveryDates': { $gte: startDate, $lte: endDate },
+        'orderedItems.deliveryDates': {
+          $gte: startDate,
+          $lte: endDate,
+        }
       }).populate('orderedItems.foodItemId').populate('user');
   
       if (orders.length === 0) {

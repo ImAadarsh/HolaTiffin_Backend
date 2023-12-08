@@ -21,4 +21,4 @@ const salesofferScheme = mongoose.Schema(
         },
     }
 );
-module.exports = mongoose.model('cartitems', salesofferScheme); 
+module.exports = mongoose.model('cartitems_new', salesofferScheme); 

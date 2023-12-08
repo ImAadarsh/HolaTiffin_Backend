@@ -23,4 +23,4 @@ const salesofferScheme = mongoose.Schema(
 
     }
 );
-module.exports = mongoose.model('amountSent', salesofferScheme); 
+module.exports = mongoose.model('amountSent_new', salesofferScheme); 
