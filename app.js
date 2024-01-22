@@ -58,7 +58,7 @@ app.post('/create-payment', async (req, res) => {
   amount = amount*100;
   const paymentIntent = await stripe.paymentIntents.create({
     amount, // Specify amount here
-    currency: "inr" // Specify currency here
+    currency: "USD" // Specify currency here
   });
   res.send({
     clientSecret: paymentIntent.client_secret
