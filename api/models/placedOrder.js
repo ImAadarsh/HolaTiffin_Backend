@@ -11,7 +11,6 @@ const orderSchema = mongoose.Schema({
       foodItemId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'dishes',
-        required: true,
       },
       deliveryDates: {
         type: Date
@@ -31,6 +30,10 @@ const orderSchema = mongoose.Schema({
         default: null,
     },
     shipping: {
+        type: Number,
+        default: null,
+    },
+    tax: {
         type: Number,
         default: null,
     },

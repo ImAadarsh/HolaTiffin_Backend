@@ -1,4 +1,5 @@
 // Require Modules
+const nodemailer = require('nodemailer');
 const express = require('express') ;
 const router  = express.Router();
 const mongoose = require('mongoose');
@@ -14,6 +15,22 @@ const order = require('../models/order');
 const Address = require('../models/addresses');
 const placedOrder = require('../models/placedOrder');
 const users = require('../models/users');
+
+
+const transporter = nodemailer.createTransport({
+    host: process.env.MAIL_HOST,
+    port: 465,
+    secure: true, // use TLS
+    auth: {
+        user: process.env.MAIL_USERNAME,
+        pass: process.env.MAIL_PASS,
+    },
+    tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false,
+    },
+});
+
 
 // Require System
 function base64Encode(file) {
@@ -51,7 +68,7 @@ router.get('/',(req,res,next)=>{
 
     try {
       // Get user details from the request body
-      const { name, email, mobile, orderedItems, tip, totalPaid, shipping, isPlaced, paymentId, cardNumber, address, city, state, zipCode, spicy } = req.body;
+      const { name, email, mobile, orderedItems, tip, totalPaid, shipping,tax, isPlaced, paymentId, cardNumber, address, city, state, zipCode, spicy } = req.body;
   // console.log(req.body); ---------------
       // Find the user by email
       let user = await users.findOne({ email });
@@ -102,6 +119,7 @@ router.get('/',(req,res,next)=>{
         tip,
         totalPaid,
         shipping,
+        tax,
         isPlaced,
         paymentId,
         cardNumber,
@@ -124,6 +142,7 @@ router.get('/',(req,res,next)=>{
       const u_id = retrievedOrder.user._id;
       const m_id = retrievedOrder.user.mobile;
       const e_id = retrievedOrder.user.email;
+      const name_email = e_id.split('@')[0];
       const a = retrievedOrder.address;
       const c = retrievedOrder.city;
       const s = retrievedOrder.state;
@@ -169,7 +188,7 @@ for (const date in groupedItems) {
     state: s,
     postal_code: z,
     instructions: n,
-    deliver_to_collect_from: 'Parth Sajnani', // Replace with the name
+    deliver_to_collect_from: name_email, // Replace with the name
     phone_number: m_id, // Replace with the phone number // Replace with the fax number
     notify_email: e_id, // Replace with the email address
     items: groupedItems[date],
@@ -193,6 +212,59 @@ request(options, function (error, response) {
   console.log(response.body);
 });
 // console.log();
+const customerName = name_email;
+const customerEmail = e_id;
+
+const emailHTML = `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holatiffin Email</title>
+  </head>
+  <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: orange;">
+
+    <!-- Header -->
+    <div style="text-align: center; padding: 20px;">
+      <img src="https://holatiffin.com/hola-long.svg" alt="Holatiffin Logo" width="150px" height="80px" style="max-width: 100%;">
+    </div>
+
+    <!-- Main Content -->
+    <div style="text-align: center; padding: 20px;">
+      <p>Hello <strong>${customerName}</strong>,</p><br>
+      <p>We hope you are enjoying our services!</p>
+      <p>Your order details:</p>
+      <!-- Add your main content here -->
+
+      <!-- Button -->
+      <a href="https://dashboard.holatiffin.com/details.php?id=${r_id}" style="display: inline-block; padding: 15px 30px; background-color: #2ecc71; color: white; text-decoration: none; font-size: 18px; border-radius: 5px;">View Order Details</a>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; padding: 20px; background-color: #e74c3c; color: white;">
+      <p>&copy; 2024 Holatiffin. All rights reserved.</p>
+    </div>
+
+  </body>
+  </html>
+`;
+
+const mailOptions = {
+  from: 'holatiffin@endeavourdigital.in',
+  to: customerEmail,
+  subject: 'Holatiffin: Order Confirmation!!',
+  html: emailHTML,
+};
+
+transporter.sendMail(mailOptions, (error, info) => {
+
+  if (error) {
+    console.error('Error sending email:', error);
+  } else {
+    console.log('Email sent:', info.response);
+  }
+});
 
 // The 'formattedData' variable now contains the desired data structure.
 

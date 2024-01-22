@@ -40,7 +40,7 @@ const amountRoute = require('./api/routes/amountSent');
 const dishesRoute = require('./api/routes/dishes');
 const orderPlacedRoute = require('./api/routes/placedOrders');
 const pincodeRoute = require('./api/routes/pincodes');
-const stripe = require("stripe")("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");
+const stripe = require("stripe")("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");
 
 // End API Routes .......................................................
 app.use('/order', orderRoute);
