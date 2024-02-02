@@ -19,7 +19,7 @@ const users = require('../models/users');
 
 const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
-    port: 465,
+    port: 2525,
     secure: true, // use TLS
     auth: {
         user: process.env.MAIL_USERNAME,
@@ -251,7 +251,7 @@ const emailHTML = `
 `;
 
 const mailOptions = {
-  from: 'holatiffin@endeavourdigital.in',
+  from: 'hola@holatiffin.com',
   to: customerEmail,
   subject: 'Holatiffin: Order Confirmation!!',
   html: emailHTML,

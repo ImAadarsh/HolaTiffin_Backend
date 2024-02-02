@@ -19,6 +19,19 @@ mongoose.set('strictQuery', false); // Set to true if you want to suppress the w
 
 // mongodb+srv://tbc:gEewZPvvJ8lWFow1@tbc.foqhnug.mongodb.net/?retryWrites=true&w=majority
 // mongodb://my_user:1%40Aadarsh@127.0.0.1:27017/test
+// Set up the app availability flag
+let appAvailable = true;
+
+// Middleware to check app availability
+const checkAppAvailability = (req, res, next) => {
+  if (!appAvailable) {
+    // If the app is not available, return an error response
+    res.status(503).json({ message: 'HolaTiffin is currently Offline, Please try again after sometime.' });
+  } else {
+    // If the app is available, continue processing the request
+    next();
+  }
+};
 
 const corsOptions = {
   origin: '*',
@@ -30,6 +43,12 @@ app.use(cors(corsOptions));
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+// Endpoint to toggle app availability (you can secure this endpoint as needed)
+app.get('/toggle-app-availability', (req, res) => {
+  appAvailable = !appAvailable;
+  res.json({ message: `App availability toggled to ${appAvailable ? 'available' : 'unavailable'}`, status: appAvailable ? 200 : 301 });
+});
+app.use(checkAppAvailability);
 
 // API Routes ........................................................
 const orderRoute = require('./api/routes/orders');
@@ -63,7 +82,10 @@ app.post('/create-payment', async (req, res) => {
   res.send({
     clientSecret: paymentIntent.client_secret
   });
-})
+});
+
+// Endpoint to toggle app availability (you can secure this endpoint as needed)
+
 
 app.post('/places', async (req, res, next) => {
   try {
