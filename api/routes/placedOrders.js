@@ -87,6 +87,13 @@ router.get('/',(req,res,next)=>{
 
       // Calculate delivery dates based on the selected days
       const currentDate = new Date();
+      const currentHour = currentDate.getHours();
+      const currentMinutes = currentDate.getMinutes();
+
+      if (currentHour >= 22 && (currentHour !== 23 || currentMinutes >= 15)) {
+        // If current time is between 22:15 and 23:59
+        currentDate.setDate(currentDate.getDate() + 1);
+    }    
       const currentDay = currentDate.getDay();
       // console.log(currentDate);
 

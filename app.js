@@ -44,11 +44,13 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // Endpoint to toggle app availability (you can secure this endpoint as needed)
-app.get('/toggle-app-availability', (req, res) => {
+app.get('/toggle-app-availability/ewytg7326rytedghb8ce7y3x4h8e973uy2hw9dn8s7ue32dnw', (req, res) => {
   appAvailable = !appAvailable;
   res.json({ message: `App availability toggled to ${appAvailable ? 'available' : 'unavailable'}`, status: appAvailable ? 200 : 301 });
 });
-app.use(checkAppAvailability);
+
+// To Make Off
+
 
 // API Routes ........................................................
 const orderRoute = require('./api/routes/orders');
@@ -69,20 +71,8 @@ app.use('/user', usersRoute);
 app.use('/addresses', Addresses);
 app.use('/feedback', feedbackRoute);
 app.use('/amountSent', amountRoute);
-app.use('/pincode', pincodeRoute);
 
-app.post('/create-payment', async (req, res) => {
-  let {amount}=req.body;
-  console.log(amount);
-  amount = amount*100;
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount, // Specify amount here
-    currency: "USD" // Specify currency here
-  });
-  res.send({
-    clientSecret: paymentIntent.client_secret
-  });
-});
+
 
 // Endpoint to toggle app availability (you can secure this endpoint as needed)
 
@@ -161,6 +151,20 @@ app.post('/get-place-details', async (req, res) => {
   }
 });
 
+app.use(checkAppAvailability);
+app.use('/pincode', pincodeRoute);
+app.post('/create-payment', async (req, res) => {
+  let {amount}=req.body;
+  console.log(amount);
+  amount = amount*100;
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount, // Specify amount here
+    currency: "USD" // Specify currency here
+  });
+  res.send({
+    clientSecret: paymentIntent.client_secret
+  });
+});
 // No Route Error Handler
 app.use((req, res, next) => {
   const error = new Error('Uri Not Found The Tiffin');

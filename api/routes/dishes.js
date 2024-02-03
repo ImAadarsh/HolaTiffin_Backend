@@ -87,21 +87,30 @@ router.get('/filter', (req, res, next) => {
       res.status(500).json({ error: err });
     });
 });
+
 router.get('/days', (req, res, next) => {
-  const daysOfWeek = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]; // Define the sequence of days
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; // Define the sequence of days
 
   const currentDate = new Date(); // Get the current date
+  currentDate.setHours(22, 15, 0, 0); // Set the time to 22:15
+
   const currentDay = currentDate.getDay(); // Get the current day as an index (0 for Sunday, 1 for Monday, etc.)
 
   // Calculate the index for each day in the sequence starting from the day after the current day
   const indexedDays = daysOfWeek.map((day, index) => {
-    const dayIndex = (currentDay  + index) % 7;
-    return { day: daysOfWeek[dayIndex], index };
+    const dayIndex = (currentDay + index) % 7;
+    const nextDate = new Date(currentDate);
+    nextDate.setDate(currentDate.getDate() + index + 1); // Adjusted to start from the next day
+    const formattedDate = `${nextDate.getDate()} ${nextDate.toLocaleString('default', { month: 'short' })}`;
+    return { day, formattedDate, index };
   });
 
   // Send the indexed days as a response
   res.status(200).json(indexedDays);
 });
+
+
+
 
 
 router.post('/', upload.fields([
