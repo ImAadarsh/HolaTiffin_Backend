@@ -90,19 +90,7 @@ router.post("/signup",(req, res, next) => {
                 .save()
                 .then(result => {
                   console.log(result);
-                  let mailOptions = {
-                    from: 'contact@thebostoncravings.com',
-                    to: req.body.email,
-                    subject: 'The Boston Craving User Created',
-                    html: 'Hi,<b> '+req.body.name+'</b>,<br> Your Account has beed sucessfully created with Boston Cravings. <br><b>Your Login Details.</b> <br> Name: '+req.body.name+' <br> Email: '+req.body.email+'<br> Mobile: '+req.body.name+'<br> Password: '+req.body.password+''
-                  };
-                  nodemail.sendMail(mailOptions, function(err, data) {
-                    if (err) {
-                      console.log("Error " + err);
-                    } else {
-                      console.log("Email sent successfully");
-                    }
-                  });
+                  
                   res.status(201).json({
                     message: "User created",
                     user: result

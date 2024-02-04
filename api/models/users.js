@@ -3,14 +3,11 @@ const mongoose = require('mongoose');
 const productScheme = mongoose.Schema(
     {
         _id: mongoose.Schema.Types.ObjectId,
-        name: {type: String, required: true},
+        name: {type: String},
         email: {
             type: String,
-            required: true,
-            unique: true,
-            match: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         },
-        mobile: {type: String, required: true},
+        mobile: {type: String},
         active: {type: Boolean, default: true},
         password: {type: String},
         userType: {
@@ -22,4 +19,4 @@ const productScheme = mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model('User_new', productScheme);
+module.exports = mongoose.model('User_new1', productScheme);

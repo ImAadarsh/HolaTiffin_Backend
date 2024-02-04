@@ -19,7 +19,7 @@ const users = require('../models/users');
 
 const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
-    port: 587,
+    port: 465,
     secure: true, // use TLS
     auth: {
         user: process.env.MAIL_USERNAME,
@@ -71,19 +71,30 @@ router.get('/',(req,res,next)=>{
       const { name, email, mobile, orderedItems, tip, totalPaid, shipping,tax, isPlaced, paymentId, cardNumber, address, city, state, zipCode, spicy } = req.body;
   // console.log(req.body); ---------------
       // Find the user by email
-      let user = await users.findOne({ email });
+      let user = await users.findOne({ email, mobile });
 
       // If the user does not exist, create a new user entry
       if (!user) {
-        const user = new users({
+        const newuser = new users({
           _id: new mongoose.Types.ObjectId(),
           name,
           email,
           mobile,
-          userType : "user"
+          userType: "user",
         });
-        await user.save();
+      
+        try {
+          user = await newuser.save();
+          console.log('User saved successfully:', user);
+        } catch (error) {
+          if (error.name === 'ValidationError') {
+            console.error('Validation Error:', error.message);
+          } else {
+            console.error('Error saving user:', error);
+          }
+        }
       }
+      
 
       // Calculate delivery dates based on the selected days
       const currentDate = new Date();
