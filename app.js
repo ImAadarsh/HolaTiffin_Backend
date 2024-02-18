@@ -185,5 +185,6 @@ app.use((error, req, res, next) => {
 const http = require('http');
 const port = 5001;
 const server = http.createServer(app);
+console.log(port);
 server.listen(port);
 module.exports = app;
