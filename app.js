@@ -26,7 +26,7 @@ let appAvailable = true;
 const checkAppAvailability = (req, res, next) => {
   if (!appAvailable) {
     // If the app is not available, return an error response
-    res.status(503).json({ message: 'HolaTiffin is currently Offline, Please try again after sometime.' });
+    res.status(503).json({ message: 'GoGo Tiffin is currently Offline, Please try again after sometime.' });
   } else {
     // If the app is available, continue processing the request
     next();

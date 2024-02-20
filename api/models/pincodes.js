@@ -11,3 +11,4 @@ const salesofferScheme = mongoose.Schema(
     }
 );
 module.exports = mongoose.model('pincode_new', salesofferScheme); 
+

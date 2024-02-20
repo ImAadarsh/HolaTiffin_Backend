@@ -237,13 +237,13 @@ const emailHTML = `
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Holatiffin Email</title>
+    <title>GOGOtiffin Email</title>
   </head>
   <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: orange;">
 
     <!-- Header -->
     <div style="text-align: center; padding: 20px;">
-      <img src="https://holatiffin.com/hola-long.svg" alt="Holatiffin Logo" width="150px" height="80px" style="max-width: 100%;">
+      <img src="https://gogotiffin.com/hola-long.svg" alt="GoGo Tiffin Logo" width="150px" height="80px" style="max-width: 100%;">
     </div>
 
     <!-- Main Content -->
@@ -259,7 +259,7 @@ const emailHTML = `
 
     <!-- Footer -->
     <div style="text-align: center; padding: 20px; background-color: #e74c3c; color: white;">
-      <p>&copy; 2024 Holatiffin. All rights reserved.</p>
+      <p>&copy; 2024 GoGOtiffin. All rights reserved.</p>
     </div>
 
   </body>
@@ -267,9 +267,9 @@ const emailHTML = `
 `;
 
 const mailOptions = {
-  from: 'holatiffin@gmail.com',
+  from: 'gogotiffins@gmail.com',
   to: customerEmail,
-  subject: 'Holatiffin: Order Confirmation!!',
+  subject: 'GOGOtiffin: Order Confirmation!!',
   html: emailHTML,
 };
 

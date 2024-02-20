@@ -70,6 +70,24 @@ router.get('/', (req, res) => {
       });
   });
 
+  router.post('/delete/bulk', async (req, res) => {
+    try {
+      const pincodeIds = req.body.ids; // Assuming 'ids' is an array of pincode IDs
+  
+      // Use Mongoose deleteMany to remove multiple documents by IDs
+      const result = await Pincode.deleteMany({ pincode: { $in: pincodeIds } });
+  
+      if (result.deletedCount === 0) {
+        return res.status(404).json({ error: 'No pincodes found for deletion.' });
+      }
+  
+      res.json({ message: 'Pincodes deleted successfully.' });
+    } catch (error) {
+      console.error('Error deleting pincodes:', error);
+      res.status(500).json({ error: 'An error occurred while deleting the pincodes.' });
+    }
+  });
+
   router.get('/:pincode', (req, res) => {
     const requestedPincode = req.params.pincode;
   
