@@ -94,7 +94,7 @@ router.get('/',(req,res,next)=>{
           }
         }
       }
-      
+
 
       // Calculate delivery dates based on the selected days
       const currentDate = new Date();
@@ -267,7 +267,7 @@ const emailHTML = `
 `;
 
 const mailOptions = {
-  from: 'gogotiffins@gmail.com',
+  from: 'hello@gogotiffin.com',
   to: customerEmail,
   subject: 'GOGOtiffin: Order Confirmation!!',
   html: emailHTML,
