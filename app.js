@@ -167,7 +167,7 @@ app.post('/create-payment', async (req, res) => {
 });
 // No Route Error Handler
 app.use((req, res, next) => {
-  const error = new Error('Uri Not Found The Tiffin');
+  const error = new Error('Uri Not Found The GoGo Tiffin');
   error.status = 404;
   next(error);
 });
