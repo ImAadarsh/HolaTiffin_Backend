@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const timestamp = require('mongoose-timestamp');
 
 const orderSchema = mongoose.Schema({
   user: {
@@ -19,7 +20,7 @@ const orderSchema = mongoose.Schema({
   ],
     orderDate: {
         type: Date,
-        default: Date.now,
+        default: () => new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }),
     },
     tip: {
         type: Number,
