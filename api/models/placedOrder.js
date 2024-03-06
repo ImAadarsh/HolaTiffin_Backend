@@ -20,7 +20,11 @@ const orderSchema = mongoose.Schema({
   ],
     orderDate: {
         type: Date,
-        default: () => new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }),
+        default: () => {
+            const now = new Date();
+            const easternTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+            return easternTime;
+        },
     },
     tip: {
         type: Number,
