@@ -95,13 +95,15 @@ router.get('/',(req,res,next)=>{
         }
       }
 
+    // Calculate current date and time in New York time zone
+    const currentDate = new Date();
 
-      // Calculate delivery dates based on the selected days
-      const currentDate = new Date();
-      const currentHour = currentDate.getHours();
-      const currentMinutes = currentDate.getMinutes();
+      // Subtract 4 hours from the current date
+      currentDate.setHours(currentDate.getHours() - 4);
+      // console.log(currentDate);
 
-        currentDate.setDate(currentDate.getDate() + 1);
+      currentDate.setDate(currentDate.getDate() + 1);
+      // console.log(currentDate);
 
       const currentDay = currentDate.getDay();
       // console.log(currentDate);
@@ -122,6 +124,9 @@ router.get('/',(req,res,next)=>{
 
         item.deliveryDates = deliveryDates;
       }
+      // const now = new Date();
+      const easternTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      console.log("EST"+easternTime);
 
       // Create a new order
       const order = new placedOrder({
@@ -144,6 +149,7 @@ router.get('/',(req,res,next)=>{
         state,
         zipCode,
         spicy,
+        orderDate: easternTime,
       });
 
       // Save the order to the database
@@ -210,7 +216,7 @@ for (const date in groupedItems) {
     items: groupedItems[date],
   });
 }
-console.log(formattedData); 
+// console.log(formattedData); 
 // Define the options for the POST request
 var options = {
   method: 'POST',
@@ -225,7 +231,7 @@ var options = {
 // Send the POST request
 request(options, function (error, response) {
   if (error) throw new Error(error);
-  console.log(response.body);
+  // console.log(response.body);
 });
 // console.log();
 const customerName = name_email;

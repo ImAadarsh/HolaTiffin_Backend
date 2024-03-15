@@ -175,9 +175,14 @@ app.use((req, res, next) => {
 // Global Route Error Handler
 app.use((error, req, res, next) => {
   res.status(error.status || 500);
+  const currentDate = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  // console.log('Current date in Boston:', currentDate);
+  
+  // console.log('Current date in Boston:', currentDate);
+  
   res.json({
     error: {
-      message: error.message,
+      message: 'Current date in Boston:'+currentDate,
     }
   });
 });
@@ -186,6 +191,14 @@ const http = require('http');
 const port = 5001;
 const server = http.createServer(app);
 console.log(port);
-// console.log(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+// const now = new Date();
+// const easternTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+// const offset = -5 * 60; // Offset in minutes for UTC-5:00
+// const est = `${easternTime.getFullYear()}-${String(easternTime.getMonth() + 1).padStart(2, '0')}-${String(easternTime.getDate()).padStart(2, '0')}T${String(easternTime.getHours()).padStart(2, '0')}:${String(easternTime.getMinutes()).padStart(2, '0')}:${String(easternTime.getSeconds()).padStart(2, '0')}.${String(easternTime.getMilliseconds()).padStart(3, '0')}${(offset < 0 ? '-' : '+')}${String(Math.abs(offset / 60)).padStart(2, '0')}:${String(Math.abs(offset % 60)).padStart(2, '0')}`;
+
+// console.log(est);
+const est = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+const formattedEst = est.toISOString();
+console.log(formattedEst);
 server.listen(port);
 module.exports = app;

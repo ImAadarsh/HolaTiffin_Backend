@@ -19,12 +19,8 @@ const orderSchema = mongoose.Schema({
     },
   ],
     orderDate: {
-        type: Date,
-        default: () => {
-            const now = new Date();
-            const easternTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-            return easternTime;
-        },
+        type: String,
+        required: true,
     },
     tip: {
         type: Number,
@@ -74,17 +70,6 @@ const orderSchema = mongoose.Schema({
         type: String,
     }
 });
-orderSchema.plugin(timestamp, {
-    useVirtual: false,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
-  });
+
   
-  orderSchema.pre('save', function (next) {
-    // Set the time zone to North Virginia (Eastern Time Zone) for createdAt and updatedAt
-    this.created_at = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
-    this.updated_at = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
-  
-    next();
-  });
 module.exports = mongoose.model('placedOrder_new', orderSchema);
