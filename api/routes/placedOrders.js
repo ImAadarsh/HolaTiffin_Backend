@@ -126,6 +126,7 @@ router.get('/',(req,res,next)=>{
     //     item.deliveryDates = deliveryDates;
     //   }
     const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() - 4);
     const currentHour = currentDate.getHours();
     const currentMinutes = currentDate.getMinutes();
       // If current time is between 22:15 and 23:59
