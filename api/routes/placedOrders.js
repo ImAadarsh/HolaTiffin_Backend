@@ -95,35 +95,62 @@ router.get('/',(req,res,next)=>{
         }
       }
 
-    // Calculate current date and time in New York time zone
-    const currentDate = new Date();
+    // // Calculate current date and time in New York time zone
+    // const currentDate = new Date();
 
-      // Subtract 4 hours from the current date
-      currentDate.setHours(currentDate.getHours() - 4);
-      console.log(currentDate);
+    //   // Subtract 4 hours from the current date
+    //   currentDate.setHours(currentDate.getHours() - 4);
+    //   console.log(currentDate);
 
-      currentDate.setDate(currentDate.getDate() + 2);
-      console.log(currentDate);
+    //   currentDate.setDate(currentDate.getDate() + 1);
+    //   console.log(currentDate);
 
-      const currentDay = currentDate.getDay();
-      console.log(currentDay);
+    //   const currentDay = currentDate.getDay();
+    //   console.log(currentDay);
 
-      for (const item of orderedItems) {
-        deliveryDates = null;
+    //   for (const item of orderedItems) {
+    //     deliveryDates = null;
 
-        for (const selectedDay of item.selectedDays) {
+    //     for (const selectedDay of item.selectedDays) {
           
-          daysUntilDelivery = (selectedDay - currentDay + 7) % 7;
-          const deliveryDate = new Date(currentDate);
-          if(currentDay==selectedDay){
-            daysUntilDelivery = 7;
-          }
-          deliveryDate.setDate(currentDate.getDate() + daysUntilDelivery);
-          deliveryDates = deliveryDate;
-        }
+    //       daysUntilDelivery = (selectedDay - currentDay + 7) % 7;
+    //       const deliveryDate = new Date(currentDate);
+    //       console.log(deliveryDate);
+    //       if(currentDay==selectedDay){
+    //         daysUntilDelivery = 7;
+    //       }
+    //       deliveryDate.setDate(currentDate.getDate() + daysUntilDelivery);
+    //       deliveryDates = deliveryDate;
+    //     }
 
-        item.deliveryDates = deliveryDates;
+    //     item.deliveryDates = deliveryDates;
+    //   }
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentMinutes = currentDate.getMinutes();
+      // If current time is between 22:15 and 23:59
+    currentDate.setDate(currentDate.getDate() + 2);
+   
+    const currentDay = currentDate.getDay();
+    console.log(currentDay);
+
+    for (const item of orderedItems) {
+      deliveryDates = null;
+
+      for (const selectedDay of item.selectedDays) {
+        
+        daysUntilDelivery = (selectedDay - currentDay + 7) % 7;
+        const deliveryDate = new Date(currentDate);
+        if(((currentDay-2)% 7)==selectedDay){
+          daysUntilDelivery = 7;
+        }
+        deliveryDate.setDate(currentDate.getDate() + daysUntilDelivery);
+        console.log(deliveryDate);
+        deliveryDates = deliveryDate;
       }
+
+      item.deliveryDates = deliveryDates;
+    }
       // const now = new Date();
       const easternTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
       console.log("EST"+easternTime);
