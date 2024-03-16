@@ -100,13 +100,13 @@ router.get('/',(req,res,next)=>{
 
       // Subtract 4 hours from the current date
       currentDate.setHours(currentDate.getHours() - 4);
-      // console.log(currentDate);
+      console.log(currentDate);
 
-      currentDate.setDate(currentDate.getDate() + 1);
-      // console.log(currentDate);
+      currentDate.setDate(currentDate.getDate() + 2);
+      console.log(currentDate);
 
       const currentDay = currentDate.getDay();
-      // console.log(currentDate);
+      console.log(currentDay);
 
       for (const item of orderedItems) {
         deliveryDates = null;
